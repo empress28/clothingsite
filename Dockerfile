@@ -1,11 +1,14 @@
-# Use official Nginx image
 FROM nginx:alpine
 
-# Remove default nginx website
-RUN rm -rf /usr/share/nginx/html/*
+# Remove the default Nginx config
+RUN rm /etc/nginx/conf.d/default.conf
 
-# Copy your static site to nginx html directory
-COPY . /usr/share/nginx/html
+# Copy the custom Nginx config
+COPY default.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 80
+# Copy built static files into Nginx web root
+COPY . /usr/share/nginx/html/
+
 EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
